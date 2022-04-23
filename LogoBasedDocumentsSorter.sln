@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31515.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogoBasedDocumentsSorter", "LogoBasedDocumentSorter\LogoBasedDocumentsSorter.csproj", "{A218F6B0-C5F6-4130-AE9A-0D80CB1BD3A9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A218F6B0-C5F6-4130-AE9A-0D80CB1BD3A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A218F6B0-C5F6-4130-AE9A-0D80CB1BD3A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A218F6B0-C5F6-4130-AE9A-0D80CB1BD3A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A218F6B0-C5F6-4130-AE9A-0D80CB1BD3A9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3AE05814-D4E2-47EF-8144-887009601738}
+	EndGlobalSection
+EndGlobal
