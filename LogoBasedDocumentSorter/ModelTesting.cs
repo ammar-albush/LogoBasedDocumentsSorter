@@ -78,68 +78,78 @@ namespace LogoBasedDocumentSorter
             
         }
 
-        private void Test_button_Click(object sender, EventArgs e)
+       private void Test_button_Click(object sender, EventArgs e)
         {
-           
-            List<Blob> selectedBlobs = ImageProcessor.getBiggestBlobsInImage(new Bitmap(orginal_Image), 220, 20, 30, 500, 500);
 
-            SelectedImages = selectedBlobs.Select(x => x.BMP).ToList();
-
-            try
+            if (orginal_Image != null)
             {
-                for (int i = 0; i < selectedBlobs.Count; i++)
+                List<Blob> selectedBlobs = ImageProcessor.getBiggestBlobsInImage(new Bitmap(orginal_Image), 220, 20, 30, 500, 500);
+
+                SelectedImages = selectedBlobs.Select(x => x.BMP).ToList();
+
+                try
                 {
-
-                    using (var graphics = Graphics.FromImage(orginal_Image))
+                    for (int i = 0; i < selectedBlobs.Count; i++)
                     {
-                        graphics.DrawRectangle(Pens.Black, selectedBlobs[i].Rectangle);
 
-                        using (Font arialFont = new Font("Arial", 9))
+                        using (var graphics = Graphics.FromImage(orginal_Image))
                         {
 
-                            var bitmap = ImageProcessor.ResizeImage(selectedBlobs[i].BMP, 32, 32);
+                            using (Font arialFont = new Font("Arial", 9))
+                            {
 
-                            NDArray nDarray = addimagepixelstoarray(new Bitmap(bitmap));
+                                var bitmap = ImageProcessor.ResizeImage(selectedBlobs[i].BMP, 32, 32);
 
-                            nDarray = nDarray.astype(np.float32);
+                                NDArray nDarray = addimagepixelstoarray(new Bitmap(bitmap));
 
-                            nDarray /= 255;
+                                nDarray = nDarray.astype(np.float32);
 
-                            string result = Central_Static_Value.Train_Model.neuron2identity[getWinnerNeuron(nDarray).Neuron];
+                                nDarray /= 255;
 
-                            graphics.DrawString(result+" , "+i.ToString(), arialFont, Brushes.Red, selectedBlobs[i].Rectangle.X, selectedBlobs[i].Rectangle.Y);
+                                string result = Central_Static_Value.Train_Model.neuron2identity[getWinnerNeuron(nDarray).Neuron];
 
+                                if (result != "negative")
+                                {
+
+                                    graphics.DrawRectangle(Pens.Black, selectedBlobs[i].Rectangle);
+
+                                    graphics.DrawString(result + " , " + i.ToString(), arialFont, Brushes.Red, selectedBlobs[i].Rectangle.X, selectedBlobs[i].Rectangle.Y);
+
+                                }
+
+
+
+                            }
                         }
                     }
+
+
+                    orginal_image_pictureBox.Image = orginal_Image;
+                    CurrentImageIndex = selectedBlobs.Count - 1;
+                    sniped_image_pictureBox.Image = selectedBlobs[CurrentImageIndex].BMP;
+                    var bmp = ImageProcessor.ResizeImage(selectedBlobs[CurrentImageIndex].BMP, 32, 32);
+                    NDArray nDa = addimagepixelstoarray(new Bitmap(bmp));
+                    nDa = nDa.astype(np.float32);
+                    nDa /= 255;
+                    Winner winner = getWinnerNeuron(nDa);
+                    string rslt = Central_Static_Value.Train_Model.neuron2identity[winner.Neuron];
+                    this.Neuron_textBox.Text = rslt;
+                    this.value_textBox.Text = winner.Value.ToString();
+                    this.current_selected_image.Text = (selectedBlobs.Count - CurrentImageIndex).ToString() + @"\" + (selectedBlobs.Count - 1).ToString();
+                    next_button.Enabled = true;
+                    back_button.Enabled = true;
+
+
+
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message);
+
                 }
 
-
-                orginal_image_pictureBox.Image = orginal_Image;
-                CurrentImageIndex = selectedBlobs.Count - 1;
-                sniped_image_pictureBox.Image = selectedBlobs[CurrentImageIndex].BMP;
-                var bmp = ImageProcessor.ResizeImage(selectedBlobs[CurrentImageIndex].BMP, 32, 32);
-                NDArray nDa = addimagepixelstoarray(new Bitmap(bmp));
-                nDa = nDa.astype(np.float32);
-                nDa /= 255;
-                Winner winner = getWinnerNeuron(nDa);
-                string rslt = Central_Static_Value.Train_Model.neuron2identity[winner.Neuron];
-                this.Neuron_textBox.Text = rslt;
-                this.value_textBox.Text = winner.Value.ToString();
-                this.current_selected_image.Text = (selectedBlobs.Count - CurrentImageIndex).ToString() + @"\" + (selectedBlobs.Count - 1).ToString();
-                next_button.Enabled = true;
-                back_button.Enabled = true;
-
-
-
             }
-            catch (Exception ex)
-            {
-
-                MessageBox.Show(ex.Message);
-
-            }
-
-            
 
 
         }
