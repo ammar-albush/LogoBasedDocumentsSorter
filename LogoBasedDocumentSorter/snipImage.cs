@@ -62,39 +62,40 @@ namespace LogoBasedDocumentSorter
             }
         }
 
-        private void Extract_Blobs_button_Click(object sender, EventArgs e)
+       private void Extract_Blobs_button_Click(object sender, EventArgs e)
         {
-
-            List<Blob> selectedImages = ImageProcessor.getBiggestBlobsInImage(new Bitmap(orginal_Image), 220, 20, 30, 500, 500);
-
-            this.SelectedImages = selectedImages.Select(x=>x.BMP).ToList();
-
-            try
+            if (orginal_Image != null)
             {
-                foreach (Rectangle rectangle in selectedImages.Select(x=>x.Rectangle).ToList())
+
+                List<Blob> selectedImages = ImageProcessor.getBiggestBlobsInImage(new Bitmap(orginal_Image), 220, 20, 30, 500, 500);
+
+                this.SelectedImages = selectedImages.Select(x => x.BMP).ToList();
+
+                try
+                {
+                    foreach (Rectangle rectangle in selectedImages.Select(x => x.Rectangle).ToList())
+                    {
+
+                        using (var graphics = Graphics.FromImage(orginal_Image))
+                        {
+                            graphics.DrawRectangle(Pens.Black, rectangle);
+                        }
+                    }
+
+                }
+                catch (Exception ex)
                 {
 
-                    using (var graphics = Graphics.FromImage(orginal_Image))
-                    {
-                        graphics.DrawRectangle(Pens.Black, rectangle);
-                    }
+                    MessageBox.Show(ex.Message);
+
                 }
 
+                orginal_image_pictureBox.Image = orginal_Image;
+                CurrentImageIndex = selectedImages.Count - 1;
+                sniped_image_pictureBox.Image = selectedImages[CurrentImageIndex].BMP;
+                this.current_selected_image.Text = (selectedImages.Count - CurrentImageIndex).ToString() + @"\" + (selectedImages.Count - 1).ToString();
             }
-            catch (Exception ex)
-            {
-
-                MessageBox.Show(ex.Message);
-
-            }
-
-            orginal_image_pictureBox.Image = orginal_Image;
-            CurrentImageIndex = selectedImages.Count - 1;
-            sniped_image_pictureBox.Image = selectedImages[CurrentImageIndex].BMP;
-            this.current_selected_image.Text = (selectedImages.Count - CurrentImageIndex).ToString() + @"\" + (selectedImages.Count - 1).ToString();
-
         }
-
         private void Image_pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
 
